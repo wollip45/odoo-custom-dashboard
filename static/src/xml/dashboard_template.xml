@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="custom_dashboard.MainTemplate" owl="1">
+        <div class="custom-dashboard-container">
+            <div class="dashboard-header">Dashboard (YTD)</div>
+            
+            <!-- Top Cards -->
+            <div class="dash-grid">
+                <div class="dash-card">
+                    <div class="dash-card-title">
+                        <i class="fa fa-money"/> Total Revenue
+                    </div>
+                    <div class="dash-card-value" t-esc="formatCurrency(state.data.total_revenue)"/>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-title">
+                        <i class="fa fa-file-text-o"/> Sale Orders
+                    </div>
+                    <div class="dash-card-value">
+                        <t t-esc="state.data.sale_orders_count"/> <span style="font-size: 16px; font-weight: normal;">orders</span>
+                    </div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-title">
+                        <i class="fa fa-cube"/> Inventory Value (Current)
+                    </div>
+                    <div class="dash-card-value" t-esc="formatCurrency(state.data.inventory_value)"/>
+                </div>
+            </div>
+
+            <!-- Middle Row: Charts -->
+            <div class="dash-grid-2-1">
+                <div class="dash-card">
+                    <div class="dash-card-title">Monthly Sales Trend</div>
+                    <div class="chart-container">
+                        <canvas t-ref="monthlyTrendCanvas"></canvas>
+                    </div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-title">Sales by Category</div>
+                    <div class="chart-container">
+                        <canvas t-ref="categoryCanvas"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Row: PO Status & Top Products -->
+            <div class="dash-grid-1-1">
+                <div class="dash-card">
+                    <div class="dash-card-title">PO Status Overview</div>
+                    <div class="chart-container">
+                        <canvas t-ref="poStatusCanvas"></canvas>
+                    </div>
+                </div>
+                <div class="dash-card">
+                    <div class="dash-card-title">Top Selling Products</div>
+                    <table class="top-products-table">
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>Quantity Sold</th>
+                                <th>Avg Unit Price</th>
+                                <th>Total Revenue</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-foreach="state.data.top_products" t-as="product" t-key="product.name">
+                                <td t-esc="product.name"/>
+                                <td t-esc="product.qty"/>
+                                <td t-esc="formatCurrency(product.avg_price)"/>
+                                <td t-esc="formatCurrency(product.total)"/>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>
